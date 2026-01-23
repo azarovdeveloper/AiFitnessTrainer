@@ -1,3 +1,5 @@
+# 🧠 AI Fitness Trainer
+
 **AiFitnessTrainer** is a simple Spring Boot 4+ application demonstrating integration with  
 **Google Gemini AI** using the official **Google GenAI SDK**, without relying on **Spring AI**  
 (which is not yet supported in Spring Boot 4+).
