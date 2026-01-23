@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: ai-fitness-trainer-service
+  docker:
+    compose:
+      enabled: true
+      file: compose.yml
+      profiles:
+        active: "dev"
+      skip:
+        in-tests: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+jwt:
+  secret: ${JWT_SECRET}
+
+stripe:
+
+
+  prices:
+    free: price_free_123

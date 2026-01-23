@@ -1,0 +1,39 @@
+services:
+  app-db:
+    container_name: app-db
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    image: postgres:16
+    profiles:
+      - dev
+      - prod
+    ports:
+      - "5432:5432"
+    volumes:
+      - app_pg_data:/var/lib/postgresql/data
+    networks:
+      - common_tools_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - common_tools_network
+networks:
+  common_tools_network:
+    driver: bridge
+    name: common_tools_network
+
+volumes:
+  app_pg_data: {}
+  pgadmin-data: {}
