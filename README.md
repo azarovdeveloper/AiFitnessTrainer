@@ -14,13 +14,11 @@ The application provides:
 
 ## 🚀 Tech Stack
 
-- Java 21+
-- Spring Boot 4+
-- Google Gemini (GenAI SDK)
-- PostgreSQL
-- Jackson
-- JSON Schema validation
-- Bean Validation (Jakarta Validation)
+- Java: 21
+- Spring Boot: 4.0.1
+- AI Model: Google Gemini (gemini-2.5-flash) via official google-genai SDK
+- Database: PostgreSQL 16
+- Containerization: Docker Compose (Spring Boot native integration)
 
 ---
 ## ▶️ Run the Application
