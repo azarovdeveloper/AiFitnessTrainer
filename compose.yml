@@ -16,19 +16,6 @@ services:
     networks:
       - common_tools_network
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
-    restart: always
-    ports:
-      - "8888:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    networks:
-      - common_tools_network
 networks:
   common_tools_network:
     driver: bridge
@@ -36,4 +23,3 @@ networks:
 
 volumes:
   app_pg_data: {}
-  pgadmin-data: {}

@@ -6,10 +6,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-public class SaasServiceApplication {
+public class AIServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SaasServiceApplication.class, args);
+		SpringApplication.run(AIServiceApplication.class, args);
 	}
-
 }

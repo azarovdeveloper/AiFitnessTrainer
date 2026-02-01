@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   application:
     name: ai-fitness-trainer-service
   docker:
@@ -11,17 +15,8 @@ spring:
         in-tests: false
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
-
-jwt:
-  secret: ${JWT_SECRET}
-
-stripe:
-
-
-  prices:
-    free: price_free_123

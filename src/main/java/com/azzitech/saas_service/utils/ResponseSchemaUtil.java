@@ -7,7 +7,6 @@ import com.google.genai.types.Schema;
 import com.google.genai.types.Type;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class ResponseSchemaUtil {
 
@@ -83,13 +82,11 @@ public class ResponseSchemaUtil {
                    })
             );
 
-            schema.properties().ifPresent(props -> {
-                props.forEach((propName, value) -> {
-                    if (node.has(propName)) {
-                        validateNode(node.get(propName), value, path + "." + propName);
-                    }
-                });
-            });
+            schema.properties().ifPresent(props -> props.forEach((propName, value) -> {
+                if (node.has(propName)) {
+                    validateNode(node.get(propName), value, path + "." + propName);
+                }
+            }));
         } else if (Type.Known.ARRAY.equals(type.knownEnum())) {
             if (!node.isArray()) {
                 throw new IllegalArgumentException("Path: " + path + " expected ARRAY but found " + node.getNodeType());
