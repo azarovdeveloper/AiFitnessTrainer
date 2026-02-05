@@ -4,6 +4,8 @@ import com.google.genai.Client;
 import com.google.genai.types.*;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class VeoVideoClient {
 
@@ -16,17 +18,21 @@ public class VeoVideoClient {
                 .build();
     }
 
-    public GenerateVideosOperation startVideoGeneration(String prompt, Image image) {
+    public GenerateVideosOperation startVideoGeneration(String prompt, List<VideoGenerationReferenceImage> refs) {
         GenerateVideosConfig config =
                 GenerateVideosConfig.builder()
+                        .numberOfVideos(1)
+                        .durationSeconds(8)
                         .aspectRatio("9:16")
-                        .durationSeconds(8)     // Veo prefers short clips
+//                        .outputGcsUri("gs://YOUR_BUCKET/output/")
                         .fps(24)
+                        .referenceImages(refs)
                         .build();
+
         return client.models.generateVideos(
-                "veo-3.0-generate-preview",
+                "veo-3.1-generate-preview",
                 prompt,
-                image,
+                null,
                 config
         );
     }

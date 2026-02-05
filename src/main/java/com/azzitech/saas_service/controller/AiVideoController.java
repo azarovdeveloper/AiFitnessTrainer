@@ -2,6 +2,8 @@ package com.azzitech.saas_service.controller;
 
 import com.azzitech.saas_service.service.AiVideoService;
 import com.google.genai.types.Image;
+import com.google.genai.types.VideoGenerationReferenceImage;
+import com.google.genai.types.VideoGenerationReferenceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,9 +26,9 @@ public class AiVideoController {
 
     @PostMapping(value = "/generate", produces = "application/octet-stream")
     public ResponseEntity<byte[]> create(@RequestPart String prompt,
-                                         @RequestPart(required = false) MultipartFile file) {
+                                         @RequestPart(name = "file", required = false) List<MultipartFile> files) {
 
-        byte[] generated = aiVideoService.generate(prompt, fetchImage(file));
+        byte[] generated = aiVideoService.generate(prompt, fetchImages(files));
 
         ContentDisposition disposition = ContentDisposition
                 .attachment()
@@ -37,19 +41,31 @@ public class AiVideoController {
                 .body(generated);
     }
 
-    private Image fetchImage(MultipartFile file) {
-        Image image = null;
-        if (file != null && !file.isEmpty()) {
-            try {
-                image = Image.builder()
-                        .imageBytes(file.getBytes())
-                        .mimeType(file.getContentType())
-                        .build();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+    private List<VideoGenerationReferenceImage> fetchImages(List<MultipartFile> files) {
+        if (files == null || files.isEmpty()) {
+            return List.of();
         }
-        return image;
+        if (files.size() > 3) {
+            throw new IllegalArgumentException("Up to 3 reference images are allowed.");
+        }
+        List<VideoGenerationReferenceImage> references = new ArrayList<>();
+        files.stream()
+                .filter(file -> file != null && !file.isEmpty())
+                .forEach(file -> {
+                    try {
+                        Image image = Image.builder()
+                                .imageBytes(file.getBytes())
+                                .mimeType(file.getContentType())
+                                .build();
+                        references.add(VideoGenerationReferenceImage.builder()
+                                .image(image)
+                                .referenceType(new VideoGenerationReferenceType(VideoGenerationReferenceType.Known.ASSET))
+                                .build());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+        return references;
     }
 
     @GetMapping("/{id}/source")
